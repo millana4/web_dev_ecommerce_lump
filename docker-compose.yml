@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres_goods:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: goods_user
+      POSTGRES_PASSWORD: goods_pass
+      POSTGRES_DB: goods_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - goods_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goods_user -d goods_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres_orders:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: orders_user
+      POSTGRES_PASSWORD: orders_pass
+      POSTGRES_DB: orders_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - orders_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orders_user -d orders_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  goods_service:
+    build: ./goods_service
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres_goods:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://goods_user:goods_pass@postgres_goods:5432/goods_db
+
+  orders_service:
+    build: ./orders_service
+    ports:
+      - "8002:8000"
+    depends_on:
+      postgres_orders:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://orders_user:orders_pass@postgres_orders:5432/orders_db
+      GOODS_SERVICE_URL: http://goods_service:8000
+
+volumes:
+  goods_data:
+  orders_data:
