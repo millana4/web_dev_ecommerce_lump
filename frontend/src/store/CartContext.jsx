@@ -5,7 +5,6 @@ const CartContext = createContext()
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([])
 
-  // Загружаем корзину из localStorage при запуске
   useEffect(() => {
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
@@ -13,7 +12,6 @@ export function CartProvider({ children }) {
     }
   }, [])
 
-  // Сохраняем корзину в localStorage при изменении
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems))
   }, [cartItems])

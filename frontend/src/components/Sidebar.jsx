@@ -11,12 +11,20 @@ import { api } from '../services/api'
 
 function Sidebar() {
   const dispatch = useDispatch()
-  // Добавляем fallback на случай, если filters будет undefined
-  const filters = useSelector(selectFilters) || { socle_id: '', shape_id: '', type_id: '' }
+  const filtersFromStore = useSelector(selectFilters)
+  const [filters, setFilters] = useState({ socle_id: '', shape_id: '', type_id: '' })
   const [socles, setSocles] = useState([])
   const [shapes, setShapes] = useState([])
   const [types, setTypes] = useState([])
 
+  // Загружаем фильтры из хранилища только один раз при монтировании
+  useEffect(() => {
+    if (filtersFromStore) {
+      setFilters(filtersFromStore)
+    }
+  }, [filtersFromStore])
+
+  // Загружаем справочники
   useEffect(() => {
     Promise.all([
       api.getSocles(),
@@ -33,12 +41,15 @@ function Sidebar() {
     switch (filterName) {
       case 'socle_id':
         dispatch(setSocleFilter(value))
+        setFilters(prev => ({ ...prev, socle_id: value }))
         break
       case 'shape_id':
         dispatch(setShapeFilter(value))
+        setFilters(prev => ({ ...prev, shape_id: value }))
         break
       case 'type_id':
         dispatch(setTypeFilter(value))
+        setFilters(prev => ({ ...prev, type_id: value }))
         break
       default:
         break
@@ -47,9 +58,8 @@ function Sidebar() {
 
   const handleResetFilters = () => {
     dispatch(resetFilters())
+    setFilters({ socle_id: '', shape_id: '', type_id: '' })
   }
-
-  // Убрали проверку if (!filters), так как теперь всегда есть объект
 
   return (
     <div className="sidebar">
