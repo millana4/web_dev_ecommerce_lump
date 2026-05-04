@@ -1,4 +1,56 @@
-function Sidebar({ filters, onFilterChange, socles, shapes, types }) {
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { 
+  setSocleFilter, 
+  setShapeFilter, 
+  setTypeFilter, 
+  resetFilters,
+  selectFilters 
+} from '../store/slices/filtersSlice'
+import { api } from '../services/api'
+
+function Sidebar() {
+  const dispatch = useDispatch()
+  // Добавляем fallback на случай, если filters будет undefined
+  const filters = useSelector(selectFilters) || { socle_id: '', shape_id: '', type_id: '' }
+  const [socles, setSocles] = useState([])
+  const [shapes, setShapes] = useState([])
+  const [types, setTypes] = useState([])
+
+  useEffect(() => {
+    Promise.all([
+      api.getSocles(),
+      api.getShapes(),
+      api.getTypes()
+    ]).then(([soclesData, shapesData, typesData]) => {
+      setSocles(soclesData)
+      setShapes(shapesData)
+      setTypes(typesData)
+    }).catch(err => console.error('Ошибка загрузки справочников:', err))
+  }, [])
+
+  const handleFilterChange = (filterName, value) => {
+    switch (filterName) {
+      case 'socle_id':
+        dispatch(setSocleFilter(value))
+        break
+      case 'shape_id':
+        dispatch(setShapeFilter(value))
+        break
+      case 'type_id':
+        dispatch(setTypeFilter(value))
+        break
+      default:
+        break
+    }
+  }
+
+  const handleResetFilters = () => {
+    dispatch(resetFilters())
+  }
+
+  // Убрали проверку if (!filters), так как теперь всегда есть объект
+
   return (
     <div className="sidebar">
       <h3>Фильтры</h3>
@@ -7,7 +59,7 @@ function Sidebar({ filters, onFilterChange, socles, shapes, types }) {
         <h4>Цоколь</h4>
         <select 
           value={filters.socle_id || ''} 
-          onChange={(e) => onFilterChange('socle_id', e.target.value)}
+          onChange={(e) => handleFilterChange('socle_id', e.target.value)}
         >
           <option value="">Все</option>
           {socles.map(socle => (
@@ -22,7 +74,7 @@ function Sidebar({ filters, onFilterChange, socles, shapes, types }) {
         <h4>Форма</h4>
         <select 
           value={filters.shape_id || ''} 
-          onChange={(e) => onFilterChange('shape_id', e.target.value)}
+          onChange={(e) => handleFilterChange('shape_id', e.target.value)}
         >
           <option value="">Все</option>
           {shapes.map(shape => (
@@ -37,7 +89,7 @@ function Sidebar({ filters, onFilterChange, socles, shapes, types }) {
         <h4>Тип лампы</h4>
         <select 
           value={filters.type_id || ''} 
-          onChange={(e) => onFilterChange('type_id', e.target.value)}
+          onChange={(e) => handleFilterChange('type_id', e.target.value)}
         >
           <option value="">Все</option>
           {types.map(type => (
@@ -50,11 +102,7 @@ function Sidebar({ filters, onFilterChange, socles, shapes, types }) {
 
       <button 
         className="reset-filters-btn"
-        onClick={() => {
-          onFilterChange('socle_id', '')
-          onFilterChange('shape_id', '')
-          onFilterChange('type_id', '')
-        }}
+        onClick={handleResetFilters}
       >
         Сбросить фильтры
       </button>

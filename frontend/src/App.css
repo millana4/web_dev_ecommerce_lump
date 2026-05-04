@@ -146,6 +146,28 @@ body {
   text-align: right;
 }
 
+/* Стили для скидки в корзине */
+.old-total {
+  color: #7f8c8d;
+  text-decoration: line-through;
+  margin: 0.5rem 0;  /* отступ сверху и снизу */
+}
+
+.old-price {
+  text-decoration: line-through;
+}
+
+.discount-info {
+  color: #e74c3c;
+  font-weight: bold;
+  margin: 0.5rem 0;  /* отступ сверху и снизу */
+}
+
+.cart-total h3 {
+  margin-top: 0.5rem;  /* отступ сверху для итоговой суммы */
+  margin-bottom: 0.5rem;  /* отступ сверху для итоговой суммы */
+}
+
 .checkout-btn {
   background-color: #27ae60;
   color: white;

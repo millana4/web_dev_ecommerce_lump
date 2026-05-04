@@ -1,8 +1,23 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
+import { api } from '../services/api'
 
 function HomePage({ products, loading }) {
   const navigate = useNavigate()
+  const [discount, setDiscount] = useState(null)
+  
+  // Загружаем акцию
+  useEffect(() => {
+    api.getActiveDiscount()
+      .then(data => setDiscount(data))
+      .catch(err => {
+        if (err.response?.status !== 404) {
+          console.error('Ошибка загрузки акции:', err)
+        }
+        setDiscount(null)
+      })
+  }, [])
   
   const popularProducts = products.slice(0, 4)
 
@@ -11,7 +26,7 @@ function HomePage({ products, loading }) {
       {/* Hero блок */}
       <div className="hero-section">
         <div className="hero-content">
-          <h1>COOL LUMP - самые крутые лампочки</h1>
+          <h1>Самые крутые лампочки</h1>
           <p className="hero-tagline">Быстро, недорого, с доставкой по всей России</p>
           <button 
             className="hero-button"
@@ -40,19 +55,25 @@ function HomePage({ products, loading }) {
       </div>
 
       {/* Блок акции */}
-      <div className="sale-section">
-        <div className="sale-content">
-          <h2>🔥 Акция! 🔥</h2>
-          <p className="sale-text">Только сегодня скидка на все лампочки 10%</p>
-          <p className="sale-dates">Спешите, предложение ограничено!</p>
-          <button 
-            className="sale-button"
-            onClick={() => navigate('/catalog')}
-          >
-            Выбрать лампочки
-          </button>
+      {discount && discount.is_active && (
+        <div className="sale-section">
+          <div className="sale-content">
+            <h2>🔥 Акция! 🔥</h2>
+            <p className="sale-text">{discount.description}</p>
+            <p className="sale-dates">
+              {discount.ends_at 
+                ? `До ${new Date(discount.ends_at).toLocaleDateString()}` 
+                : 'Спешите, предложение ограничено!'}
+            </p>
+            <button 
+              className="sale-button"
+              onClick={() => navigate('/catalog')}
+            >
+              Выбрать лампочки
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { useCart } from '../store/CartContext'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../store/slices/cartSlice'
 
 function ProductCard({ product }) {
-  const { addToCart } = useCart()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleCardClick = () => {
@@ -10,8 +11,8 @@ function ProductCard({ product }) {
   }
 
   const handleAddToCart = (e) => {
-    e.stopPropagation() // Чтобы не сработал переход на страницу товара
-    addToCart(product)
+    e.stopPropagation()
+    dispatch(addToCart(product))
   }
 
   return (

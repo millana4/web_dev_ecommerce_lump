@@ -54,6 +54,33 @@ services:
       DATABASE_URL: postgresql://orders_user:orders_pass@postgres_orders:5432/orders_db
       GOODS_SERVICE_URL: http://goods_service:8000
 
+  postgres_discount:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: discount_user
+      POSTGRES_PASSWORD: discount_pass
+      POSTGRES_DB: discount_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - discount_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U discount_user -d discount_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  discount_service:
+    build: ./discount_service
+    ports:
+      - "8003:8000"
+    depends_on:
+      postgres_discount:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://discount_user:discount_pass@postgres_discount:5432/discount_db
+
 volumes:
   goods_data:
   orders_data:
+  discount_data:

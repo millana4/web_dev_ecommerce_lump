@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../store/slices/cartSlice'
 import { api } from '../services/api'
-import { useCart } from '../store/CartContext'
 
 function ProductPage() {
-  const { id } = useParams()  // ← вот здесь получаем id из URL
+  const { id } = useParams()
   const navigate = useNavigate()
-  const { addToCart } = useCart()
+  const dispatch = useDispatch()
+  
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [reviews, setReviews] = useState([])
@@ -45,6 +47,10 @@ function ProductPage() {
     }).catch(err => console.error('Ошибка загрузки справочников:', err))
   }, [id])
 
+  const handleAddToCart = () => {
+    dispatch(addToCart(product))
+  }
+
   if (loading) return <p className="loading">Загрузка...</p>
   if (error) return <p className="error">{error}</p>
   if (!product) return null
@@ -63,7 +69,7 @@ function ProductPage() {
           {product.quantity > 0 ? (
             <button 
               className="add-to-cart-btn"
-              onClick={() => addToCart(product)}
+              onClick={handleAddToCart}
             >
               Добавить в корзину
             </button>

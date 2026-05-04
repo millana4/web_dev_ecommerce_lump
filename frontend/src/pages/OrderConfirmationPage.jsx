@@ -5,12 +5,15 @@ function OrderConfirmationPage() {
 
   return (
     <div className="confirmation-page">
-      <h2>Заказ оформлен!</h2>
+      <h2>Спасибо за заказ! 🎉</h2>
       <div className="confirmation-card">
-        <p>Номер вашего заказа: <strong>#{orderId}</strong></p>
-        <p>Статус: <strong>NEW</strong></p>
-        <p>Мы свяжемся с вами в ближайшее время.</p>
-        <Link to="/" className="continue-btn">Продолжить покупки</Link>
+        <p className="confirmation-message">
+          Номер вашего заказа: <strong>#{orderId}</strong>
+        </p>
+        <p>Оператор свяжется с вами в ближайшее время.</p>
+        <Link to="/" className="continue-btn">
+          На главную
+        </Link>
       </div>
     </div>
   )
