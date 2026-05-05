@@ -12,6 +12,7 @@ function Header() {
         <Link to="/">Главная</Link>
         <Link to="/catalog">Каталог</Link>
         <Link to="/cart">Корзина {totalItems > 0 && `(${totalItems})`}</Link>
+        <Link to="/contacts">Контакты</Link>
       </nav>
       <h1>COOL LUMP SHOP</h1>
     </header>

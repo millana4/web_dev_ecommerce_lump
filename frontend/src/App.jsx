@@ -12,6 +12,7 @@ import CartPage from './pages/card_page/CartPage'
 import CheckoutPage from './pages/checkout_page/CheckoutPage'
 import OrderConfirmationPage from './pages/order_confirmation_page/OrderConfirmationPage'
 import ProductPage from './pages/product_page/ProductPage'
+import ContactsPage from './pages/contacts_page/ContactsPage'
 
 function App() {
   const dispatch = useDispatch()
@@ -44,19 +45,13 @@ function App() {
         
         <main className="main">
           <Routes>
-            <Route path="/" element={
-              <HomePage products={products} loading={loading} />
-            } />
-            <Route path="/catalog" element={
-              <CatalogPage 
-                products={filteredProducts}
-                loading={loading}
-              />
-            } />
+            <Route path="/" element={<HomePage products={products} loading={loading} />} />
+            <Route path="/catalog" element={<CatalogPage products={filteredProducts} loading={loading} />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
             <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
           </Routes>
         </main>
 
