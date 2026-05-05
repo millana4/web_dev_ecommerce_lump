@@ -7,8 +7,9 @@ import {
   selectCartTotalWithoutDiscount, 
   removeFromCart, 
   updateQuantity 
-} from '../store/slices/cartSlice'
-import { api } from '../services/api'
+} from '../../store/slices/cartSlice'
+import { api } from '../../services/api'
+import styles from './CartPage.module.css'
 
 function CartPage() {
   const navigate = useNavigate()
@@ -19,9 +20,7 @@ function CartPage() {
   const totalWithoutDiscount = useSelector(selectCartTotalWithoutDiscount)
   
   const [discount, setDiscount] = useState(null)
-  const [loadingDiscount, setLoadingDiscount] = useState(true)
 
-  // Загружаем акцию
   useEffect(() => {
     api.getActiveDiscount()
       .then(data => setDiscount(data))
@@ -31,7 +30,6 @@ function CartPage() {
         }
         setDiscount(null)
       })
-      .finally(() => setLoadingDiscount(false))
   }, [])
 
   const handleRemoveFromCart = (good_id) => {
@@ -42,7 +40,6 @@ function CartPage() {
     dispatch(updateQuantity({ good_id, quantity }))
   }
 
-  // Рассчитываем сумму со скидкой
   const totalWithDiscount = discount && discount.is_active
     ? totalWithoutDiscount * (100 - discount.discount_percent) / 100
     : totalWithoutDiscount
@@ -59,14 +56,14 @@ function CartPage() {
   return (
     <div>
       <h2>Корзина ({getTotalItems} товаров)</h2>
-      <div className="cart-items">
+      <div className={styles.cartItems}>
         {cartItems.map(item => (
-          <div key={item.good_id} className="cart-item">
-            <div className="cart-item-info">
+          <div key={item.good_id} className={styles.cartItem}>
+            <div className={styles.cartItemInfo}>
               <h3>{item.title}</h3>
               <p>{item.price} ₽</p>
             </div>
-            <div className="cart-item-controls">
+            <div className={styles.cartItemControls}>
               <input
                 type="number"
                 min="1"
@@ -79,24 +76,25 @@ function CartPage() {
           </div>
         ))}
       </div>
-      <div className="cart-total">
+      <div className={styles.cartTotal}>
         {discount && discount.is_active && totalWithoutDiscount !== totalWithDiscount ? (
           <>
-            <p className="old-total">
-              Без скидки: <span className="old-price">{totalWithoutDiscount.toFixed(2)} ₽</span>
+            <p className={styles.oldTotal}>
+              Без скидки: <span className={styles.oldPrice}>{totalWithoutDiscount.toFixed(2)} ₽</span>
             </p>
-            <p className="discount-info">
+            <p className={styles.discountInfo}>
               Скидка: {discount.discount_percent}%
             </p>
             <h3>
               Итого со скидкой: {totalWithDiscount.toFixed(2)} ₽
             </h3>
+            <br></br>
           </>
         ) : (
           <h3>Итого: {totalWithoutDiscount.toFixed(2)} ₽</h3>
         )}
         <button 
-          className="checkout-btn"
+          className={styles.checkoutBtn}
           onClick={() => navigate('/checkout')}
         >
           Оформить заказ

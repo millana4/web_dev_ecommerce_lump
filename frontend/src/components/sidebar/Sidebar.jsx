@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { 
-  setSocleFilter, 
-  setShapeFilter, 
-  setTypeFilter, 
-  resetFilters,
-  selectFilters 
-} from '../store/slices/filtersSlice'
-import { api } from '../services/api'
+import { setSocleFilter, setShapeFilter, setTypeFilter, resetFilters, selectFilters } from '../../store/slices/filtersSlice'
+import { api } from '../../services/api'
+import styles from './Sidebar.module.css'
 
 function Sidebar() {
   const dispatch = useDispatch()
@@ -62,10 +57,10 @@ function Sidebar() {
   }
 
   return (
-    <div className="sidebar">
+    <div className={styles.sidebar}>
       <h3>Фильтры</h3>
       
-      <div className="filter-group">
+      <div className={styles.filterGroup}>
         <h4>Цоколь</h4>
         <select 
           value={filters.socle_id || ''} 
@@ -80,7 +75,7 @@ function Sidebar() {
         </select>
       </div>
 
-      <div className="filter-group">
+      <div className={styles.filterGroup}>
         <h4>Форма</h4>
         <select 
           value={filters.shape_id || ''} 
@@ -95,7 +90,7 @@ function Sidebar() {
         </select>
       </div>
 
-      <div className="filter-group">
+      <div className={styles.filterGroup}>
         <h4>Тип лампы</h4>
         <select 
           value={filters.type_id || ''} 
@@ -111,7 +106,7 @@ function Sidebar() {
       </div>
 
       <button 
-        className="reset-filters-btn"
+        className={styles.resetFiltersBtn}
         onClick={handleResetFilters}
       >
         Сбросить фильтры

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { addToCart } from '../store/slices/cartSlice'
-import { api } from '../services/api'
+import { addToCart } from '../../store/slices/cartSlice'
+import { api } from '../../services/api'
+import styles from './ProductPage.module.css'
 
 function ProductPage() {
   const { id } = useParams()
@@ -18,7 +19,6 @@ function ProductPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    // Загружаем товар
     api.getGood(parseInt(id))
       .then(data => {
         setProduct(data)
@@ -30,12 +30,10 @@ function ProductPage() {
         setLoading(false)
       })
 
-    // Загружаем отзывы
     api.getReviews(parseInt(id))
       .then(data => setReviews(data))
       .catch(err => console.error('Ошибка загрузки отзывов:', err))
 
-    // Загружаем справочники
     Promise.all([
       api.getSocles(),
       api.getShapes(),
@@ -51,34 +49,34 @@ function ProductPage() {
     dispatch(addToCart(product))
   }
 
-  if (loading) return <p className="loading">Загрузка...</p>
-  if (error) return <p className="error">{error}</p>
+  if (loading) return <p className={styles.loading}>Загрузка...</p>
+  if (error) return <p className={styles.error}>{error}</p>
   if (!product) return null
 
   return (
-    <div className="product-page">
-      <button className="back-btn" onClick={() => navigate('/catalog')}>← Назад в каталог</button>
+    <div className={styles.productPage}>
+      <button className={styles.backBtn} onClick={() => navigate('/catalog')}>← Назад в каталог</button>
       
-      <div className="product-details">
-        <div className="product-info">
+      <div className={styles.productDetails}>
+        <div className={styles.productInfo}>
           <h1>{product.title}</h1>
-          <p className="product-price">{product.price} ₽</p>
-          <p className="product-stock">В наличии: {product.quantity} шт.</p>
-          <p className="product-description">{product.description || 'Описание отсутствует'}</p>
+          <p className={styles.productPrice}>{product.price} ₽</p>
+          <p className={styles.productStock}>В наличии: {product.quantity} шт.</p>
+          <p className={styles.productDescription}>{product.description || 'Описание отсутствует'}</p>
           
           {product.quantity > 0 ? (
             <button 
-              className="add-to-cart-btn"
+              className={styles.addToCartBtn}
               onClick={handleAddToCart}
             >
               Добавить в корзину
             </button>
           ) : (
-            <button className="out-of-stock-btn" disabled>Нет в наличии</button>
+            <button className={styles.outOfStockBtn} disabled>Нет в наличии</button>
           )}
         </div>
 
-        <div className="product-specs">
+        <div className={styles.productSpecs}>
           <h3>Характеристики</h3>
           <table>
             <tbody>
@@ -111,18 +109,18 @@ function ProductPage() {
         </div>
       </div>
 
-      <div className="reviews-section">
+      <div className={styles.reviewsSection}>
         <h2>Отзывы</h2>
         {reviews.length === 0 ? (
           <p>Пока нет отзывов. Будьте первым!</p>
         ) : (
           reviews.map(review => (
-            <div key={review.review_id} className="review-card">
-              <div className="review-rating">
+            <div key={review.review_id} className={styles.reviewCard}>
+              <div className={styles.reviewRating}>
                 {'⭐'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
               </div>
-              <p className="review-comment">{review.comment}</p>
-              <p className="review-date">{new Date(review.created_at).toLocaleDateString()}</p>
+              <p className={styles.reviewComment}>{review.comment}</p>
+              <p className={styles.reviewDate}>{new Date(review.created_at).toLocaleDateString()}</p>
             </div>
           ))
         )}

@@ -1,0 +1,113 @@
+.homePage {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.heroSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #d84315 0%, #ff9800 100%);
+  border-radius: 16px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  color: white;
+}
+
+.heroContent {
+  flex: 1;
+}
+
+.heroContent h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.heroTagline {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.heroButton {
+  background-color: white;
+  color: #d84315;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.heroButton:hover {
+  transform: scale(1.05);
+  background-color: #fff5f0;
+}
+
+.heroImage {
+  flex: 1;
+  text-align: center;
+}
+
+.heroImage img {
+  max-width: 100%;
+  border-radius: 12px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+/* Popular Section */
+.popularSection {
+  margin-bottom: 3rem;
+}
+
+.popularSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+/* Sale Section */
+.saleSection {
+  background: linear-gradient(90deg, #d84315 0%, #ff9800 100%);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.saleContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.saleText {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.saleDates {
+  font-size: 1rem;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.saleButton {
+  background-color: white;
+  color: #d84315;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.saleButton:hover {
+  background-color: #fff5f0;
+  transform: scale(1.05);
+}

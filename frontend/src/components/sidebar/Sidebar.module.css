@@ -1,0 +1,46 @@
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.sidebar h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.filterGroup {
+  margin-bottom: 1.5rem;
+}
+
+.filterGroup h4 {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.filterGroup select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.resetFiltersBtn {
+  width: 100%;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.resetFiltersBtn:hover {
+  background-color: #7f8c8d;
+}

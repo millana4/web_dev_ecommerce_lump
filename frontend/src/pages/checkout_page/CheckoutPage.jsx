@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCartItems, selectCartTotalWithoutDiscount, clearCart } from '../store/slices/cartSlice'
-import { api } from '../services/api'
+import { selectCartItems, selectCartTotalWithoutDiscount, clearCart } from "../../store/slices/cartSlice";
+import { api } from "../../services/api";
+import styles from "./CheckoutPage.module.css";
 
 function CheckoutPage() {
   const dispatch = useDispatch()
@@ -18,16 +19,14 @@ function CheckoutPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [orderCompleted, setOrderCompleted] = useState(false) // флаг, что заказ уже оформлен
+  const [orderCompleted, setOrderCompleted] = useState(false)
 
-  // Редирект при пустой корзине — ТОЛЬКО если заказ НЕ оформлен
   useEffect(() => {
     if (cartItems.length === 0 && !orderCompleted) {
       navigate('/')
     }
   }, [cartItems, navigate, orderCompleted])
 
-  // Загружаем акцию
   useEffect(() => {
     api.getActiveDiscount()
       .then(data => setDiscount(data))
@@ -70,7 +69,7 @@ function CheckoutPage() {
     try {
       const response = await api.createOrder(orderData)
       dispatch(clearCart())
-      setOrderCompleted(true) // помечаем, что заказ оформлен
+      setOrderCompleted(true)
       navigate(`/order-confirmation/${response.order_id}`)
     } catch (err) {
       console.error('Ошибка при создании заказа:', err)
@@ -85,13 +84,13 @@ function CheckoutPage() {
   }
 
   return (
-    <div className="checkout-page">
+    <div className={styles.checkoutPage}>
       <h2>Оформление заказа</h2>
       
-      <div className="checkout-container">
-        <div className="checkout-form">
+      <div className={styles.checkoutContainer}>
+        <div className={styles.checkoutForm}>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label>Имя *</label>
               <input
                 type="text"
@@ -102,7 +101,7 @@ function CheckoutPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label>Телефон *</label>
               <input
                 type="tel"
@@ -113,7 +112,7 @@ function CheckoutPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label>Email *</label>
               <input
                 type="email"
@@ -124,7 +123,7 @@ function CheckoutPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label>Комментарий к заказу</label>
               <textarea
                 name="order_comment"
@@ -134,7 +133,7 @@ function CheckoutPage() {
               />
             </div>
 
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className={styles.errorMessage}>{error}</div>}
 
             <button type="submit" disabled={loading}>
               {loading ? 'Оформление...' : 'Оформить заказ'}
@@ -142,10 +141,10 @@ function CheckoutPage() {
           </form>
         </div>
 
-        <div className="checkout-summary">
+        <div className={styles.checkoutSummary}>
           <h3>Ваш заказ</h3>
           {cartItems.map(item => (
-            <div key={item.good_id} className="summary-item">
+            <div key={item.good_id} className={styles.summaryItem}>
               <span>{item.title} x {item.quantity}</span>
               <span>{item.price * item.quantity} ₽</span>
             </div>
@@ -153,21 +152,21 @@ function CheckoutPage() {
           
           {discount && discount.is_active && totalWithoutDiscount !== totalWithDiscount ? (
             <>
-              <div className="summary-item old-total">
+              <div className={`${styles.summaryItem} ${styles.oldTotal}`}>
                 <span>Без скидки:</span>
-                <span className="old-price">{totalWithoutDiscount.toFixed(2)} ₽</span>
+                <span className={styles.oldPrice}>{totalWithoutDiscount.toFixed(2)} ₽</span>
               </div>
-              <div className="summary-item discount-info">
+              <div className={`${styles.summaryItem} ${styles.discountInfo}`}>
                 <span>Скидка ({discount.discount_percent}%):</span>
                 <span>-{(totalWithoutDiscount - totalWithDiscount).toFixed(2)} ₽</span>
               </div>
-              <div className="summary-total">
+              <div className={styles.summaryTotal}>
                 <strong>Итого со скидкой:</strong>
                 <strong>{totalWithDiscount.toFixed(2)} ₽</strong>
               </div>
             </>
           ) : (
-            <div className="summary-total">
+            <div className={styles.summaryTotal}>
               <strong>Итого:</strong>
               <strong>{totalWithoutDiscount.toFixed(2)} ₽</strong>
             </div>

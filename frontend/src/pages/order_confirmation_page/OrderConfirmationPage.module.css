@@ -1,0 +1,27 @@
+.confirmationPage {
+  text-align: center;
+  padding: 2rem;
+}
+
+.confirmationCard {
+  background: white;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.continueBtn {
+  display: inline-block;
+  background-color: #2c3e50;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.continueBtn:hover {
+  background-color: #1a252f;
+}

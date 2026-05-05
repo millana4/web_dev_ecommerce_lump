@@ -1,0 +1,8 @@
+.catalogContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.productsContainer {
+  flex: 1;
+}

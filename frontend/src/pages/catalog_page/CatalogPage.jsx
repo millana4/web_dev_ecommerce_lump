@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux'
-import Sidebar from '../components/Sidebar'
-import ProductCard from '../components/ProductCard'
-import { selectFilters } from '../store/slices/filtersSlice'
+import Sidebar from '../../components/sidebar/Sidebar'
+import ProductCard from '../../components/product_card/ProductCard'
+import { selectFilters } from '../../store/slices/filtersSlice'
+import styles from './CatalogPage.module.css'
 
 function CatalogPage({ products, loading }) {
   const filters = useSelector(selectFilters)
@@ -14,9 +15,9 @@ function CatalogPage({ products, loading }) {
   })
 
   return (
-    <div className="catalog-container">
+    <div className={styles.catalogContainer}>
       <Sidebar />
-      <div className="products-container">
+      <div className={styles.productsContainer}>
         <h2>Каталог лампочек</h2>
         {loading ? (
           <p>Загрузка товаров...</p>

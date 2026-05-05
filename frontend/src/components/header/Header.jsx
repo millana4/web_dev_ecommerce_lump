@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectCartTotalItems } from '../store/slices/cartSlice'
+import { selectCartTotalItems } from "../../store/slices/cartSlice";
+import styles from "./Header.module.css";
 
 function Header() {
   const totalItems = useSelector(selectCartTotalItems)
 
   return (
-    <header className="header">
+    <header className={styles.header}>
       <nav>
         <Link to="/">Главная</Link>
         <Link to="/catalog">Каталог</Link>
