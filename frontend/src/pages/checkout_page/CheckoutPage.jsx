@@ -61,8 +61,7 @@ function CheckoutPage() {
       order_comment: formData.order_comment,
       items: cartItems.map(item => ({
         good_id: item.good_id,
-        quantity: item.quantity,
-        price: item.price
+        quantity: item.quantity
       }))
     }
 

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres_goods:
     image: postgres:15
@@ -42,6 +40,8 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://goods_user:goods_pass@postgres_goods:5432/goods_db
+      SECRET_KEY: super-secret-jwt-key-change-me-in-production-12345
+      INTERNAL_API_KEY: internal-service-key-change-me-12345
 
   orders_service:
     build: ./orders_service
@@ -53,6 +53,8 @@ services:
     environment:
       DATABASE_URL: postgresql://orders_user:orders_pass@postgres_orders:5432/orders_db
       GOODS_SERVICE_URL: http://goods_service:8000
+      SECRET_KEY: super-secret-jwt-key-change-me-in-production-12345
+      INTERNAL_API_KEY: internal-service-key-change-me-12345
 
   postgres_discount:
     image: postgres:15
@@ -80,7 +82,35 @@ services:
     environment:
       DATABASE_URL: postgresql://discount_user:discount_pass@postgres_discount:5432/discount_db
 
+  postgres_auth:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_pass
+      POSTGRES_DB: auth_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth_service:
+    build: ./auth_service
+    ports:
+      - "8004:8000"
+    depends_on:
+      postgres_auth:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://auth_user:auth_pass@postgres_auth:5432/auth_db
+      SECRET_KEY: super-secret-jwt-key-change-me-in-production-12345
+
 volumes:
   goods_data:
   orders_data:
   discount_data:
+  auth_data:
